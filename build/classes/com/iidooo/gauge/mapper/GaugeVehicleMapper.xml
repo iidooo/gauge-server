@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.iidooo.gauge.mapper.GaugeVehicleMapper" >
+  <resultMap id="BaseResultMap" type="com.iidooo.gauge.model.po.GaugeVehicle" >
+    <id column="VehicleID" property="vehicleID" jdbcType="INTEGER" />
+    <result column="VehicleNo" property="vehicleNo" jdbcType="VARCHAR" />
+    <result column="License" property="license" jdbcType="VARCHAR" />
+    <result column="Volume" property="volume" jdbcType="REAL" />
+    <result column="Maker" property="maker" jdbcType="VARCHAR" />
+    <result column="Type" property="type" jdbcType="VARCHAR" />
+    <result column="Model" property="model" jdbcType="VARCHAR" />
+    <result column="Remarks" property="remarks" jdbcType="VARCHAR" />
+    <result column="UpdateTime" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="UpdateUserID" property="updateUserID" jdbcType="INTEGER" />
+    <result column="CreateTime" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="CreateUserID" property="createUserID" jdbcType="INTEGER" />
+    <result column="IsDelete" property="isDelete" jdbcType="INTEGER" />
+    <result column="Version" property="version" jdbcType="INTEGER" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    VehicleID, VehicleNo, License, Volume, Maker, Type, Model, Remarks, UpdateTime, UpdateUserID, 
+    CreateTime, CreateUserID, IsDelete, Version
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from gauge_vehicle
+    where VehicleID = #{vehicleID,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from gauge_vehicle
+    where VehicleID = #{vehicleID,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.iidooo.gauge.model.po.GaugeVehicle" >
+    insert into gauge_vehicle (VehicleID, VehicleNo, License, 
+      Volume, Maker, Type, Model, 
+      Remarks, UpdateTime, UpdateUserID, 
+      CreateTime, CreateUserID, IsDelete, 
+      Version)
+    values (#{vehicleID,jdbcType=INTEGER}, #{vehicleNo,jdbcType=VARCHAR}, #{license,jdbcType=VARCHAR}, 
+      #{volume,jdbcType=REAL}, #{maker,jdbcType=VARCHAR}, #{type,jdbcType=VARCHAR}, #{model,jdbcType=VARCHAR}, 
+      #{remarks,jdbcType=VARCHAR}, #{updateTime,jdbcType=TIMESTAMP}, #{updateUserID,jdbcType=INTEGER}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{createUserID,jdbcType=INTEGER}, #{isDelete,jdbcType=INTEGER}, 
+      #{version,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="com.iidooo.gauge.model.po.GaugeVehicle" >
+    insert into gauge_vehicle
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="vehicleID != null" >
+        VehicleID,
+      </if>
+      <if test="vehicleNo != null" >
+        VehicleNo,
+      </if>
+      <if test="license != null" >
+        License,
+      </if>
+      <if test="volume != null" >
+        Volume,
+      </if>
+      <if test="maker != null" >
+        Maker,
+      </if>
+      <if test="type != null" >
+        Type,
+      </if>
+      <if test="model != null" >
+        Model,
+      </if>
+      <if test="remarks != null" >
+        Remarks,
+      </if>
+      <if test="updateTime != null" >
+        UpdateTime,
+      </if>
+      <if test="updateUserID != null" >
+        UpdateUserID,
+      </if>
+      <if test="createTime != null" >
+        CreateTime,
+      </if>
+      <if test="createUserID != null" >
+        CreateUserID,
+      </if>
+      <if test="isDelete != null" >
+        IsDelete,
+      </if>
+      <if test="version != null" >
+        Version,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="vehicleID != null" >
+        #{vehicleID,jdbcType=INTEGER},
+      </if>
+      <if test="vehicleNo != null" >
+        #{vehicleNo,jdbcType=VARCHAR},
+      </if>
+      <if test="license != null" >
+        #{license,jdbcType=VARCHAR},
+      </if>
+      <if test="volume != null" >
+        #{volume,jdbcType=REAL},
+      </if>
+      <if test="maker != null" >
+        #{maker,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null" >
+        #{type,jdbcType=VARCHAR},
+      </if>
+      <if test="model != null" >
+        #{model,jdbcType=VARCHAR},
+      </if>
+      <if test="remarks != null" >
+        #{remarks,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateUserID != null" >
+        #{updateUserID,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createUserID != null" >
+        #{createUserID,jdbcType=INTEGER},
+      </if>
+      <if test="isDelete != null" >
+        #{isDelete,jdbcType=INTEGER},
+      </if>
+      <if test="version != null" >
+        #{version,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.iidooo.gauge.model.po.GaugeVehicle" >
+    update gauge_vehicle
+    <set >
+      <if test="vehicleNo != null" >
+        VehicleNo = #{vehicleNo,jdbcType=VARCHAR},
+      </if>
+      <if test="license != null" >
+        License = #{license,jdbcType=VARCHAR},
+      </if>
+      <if test="volume != null" >
+        Volume = #{volume,jdbcType=REAL},
+      </if>
+      <if test="maker != null" >
+        Maker = #{maker,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null" >
+        Type = #{type,jdbcType=VARCHAR},
+      </if>
+      <if test="model != null" >
+        Model = #{model,jdbcType=VARCHAR},
+      </if>
+      <if test="remarks != null" >
+        Remarks = #{remarks,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null" >
+        UpdateTime = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateUserID != null" >
+        UpdateUserID = #{updateUserID,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null" >
+        CreateTime = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createUserID != null" >
+        CreateUserID = #{createUserID,jdbcType=INTEGER},
+      </if>
+      <if test="isDelete != null" >
+        IsDelete = #{isDelete,jdbcType=INTEGER},
+      </if>
+      <if test="version != null" >
+        Version = #{version,jdbcType=INTEGER},
+      </if>
+    </set>
+    where VehicleID = #{vehicleID,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.iidooo.gauge.model.po.GaugeVehicle" >
+    update gauge_vehicle
+    set VehicleNo = #{vehicleNo,jdbcType=VARCHAR},
+      License = #{license,jdbcType=VARCHAR},
+      Volume = #{volume,jdbcType=REAL},
+      Maker = #{maker,jdbcType=VARCHAR},
+      Type = #{type,jdbcType=VARCHAR},
+      Model = #{model,jdbcType=VARCHAR},
+      Remarks = #{remarks,jdbcType=VARCHAR},
+      UpdateTime = #{updateTime,jdbcType=TIMESTAMP},
+      UpdateUserID = #{updateUserID,jdbcType=INTEGER},
+      CreateTime = #{createTime,jdbcType=TIMESTAMP},
+      CreateUserID = #{createUserID,jdbcType=INTEGER},
+      IsDelete = #{isDelete,jdbcType=INTEGER},
+      Version = #{version,jdbcType=INTEGER}
+    where VehicleID = #{vehicleID,jdbcType=INTEGER}
+  </update>
+</mapper>
