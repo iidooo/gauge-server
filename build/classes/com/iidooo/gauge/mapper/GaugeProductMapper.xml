@@ -81,6 +81,14 @@
     where D.IsDelete = 0 and D.DriverID = #{driverID,jdbcType=INTEGER}
   </select>  
   
+  <!-- 根据主键查找设备 -->
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+  	select 
+    <include refid="Base_Column_List" />
+    from gauge_product P 
+    where P.IsDelete = 0 and P.ProductID = #{productID,jdbcType=INTEGER}
+  </select>
+  
   <!-- 查询设备一览的数量 -->
   <select id="selectCountForSearch" parameterType="com.iidooo.gauge.model.po.GaugeProduct" resultType="java.lang.Integer">
     select count(P.ProductID)
@@ -137,24 +145,11 @@
     delete from gauge_product
     where ProductID = #{productID,jdbcType=INTEGER}
   </delete>
-  <insert id="insert" parameterType="com.iidooo.gauge.model.po.GaugeProduct">
-    insert into gauge_product (ProductID, VehicleID, DriverID, 
-      ProductCode, City, Remarks, 
-      UpdateTime, UpdateUserID, CreateTime, 
-      CreateUserID, IsDelete, Version
-      )
-    values (#{productID,jdbcType=INTEGER}, #{vehicleID,jdbcType=INTEGER}, #{driverID,jdbcType=INTEGER}, 
-      #{productCode,jdbcType=VARCHAR}, #{city,jdbcType=VARCHAR}, #{remarks,jdbcType=VARCHAR}, 
-      #{updateTime,jdbcType=TIMESTAMP}, #{updateUserID,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, 
-      #{createUserID,jdbcType=INTEGER}, #{isDelete,jdbcType=INTEGER}, #{version,jdbcType=INTEGER}
-      )
-  </insert>
-  <insert id="insertSelective" parameterType="com.iidooo.gauge.model.po.GaugeProduct">
+  
+  <!-- 插入一个新的设备对象 -->
+  <insert id="insert" useGeneratedKeys="true" keyProperty="productID" parameterType="com.iidooo.gauge.model.po.GaugeProduct">
     insert into gauge_product
     <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="productID != null">
-        ProductID,
-      </if>
       <if test="vehicleID != null">
         VehicleID,
       </if>
@@ -170,9 +165,6 @@
       <if test="remarks != null">
         Remarks,
       </if>
-      <if test="updateTime != null">
-        UpdateTime,
-      </if>
       <if test="updateUserID != null">
         UpdateUserID,
       </if>
@@ -182,17 +174,8 @@
       <if test="createUserID != null">
         CreateUserID,
       </if>
-      <if test="isDelete != null">
-        IsDelete,
-      </if>
-      <if test="version != null">
-        Version,
-      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="productID != null">
-        #{productID,jdbcType=INTEGER},
-      </if>
       <if test="vehicleID != null">
         #{vehicleID,jdbcType=INTEGER},
       </if>
@@ -208,9 +191,6 @@
       <if test="remarks != null">
         #{remarks,jdbcType=VARCHAR},
       </if>
-      <if test="updateTime != null">
-        #{updateTime,jdbcType=TIMESTAMP},
-      </if>
       <if test="updateUserID != null">
         #{updateUserID,jdbcType=INTEGER},
       </if>
@@ -220,15 +200,11 @@
       <if test="createUserID != null">
         #{createUserID,jdbcType=INTEGER},
       </if>
-      <if test="isDelete != null">
-        #{isDelete,jdbcType=INTEGER},
-      </if>
-      <if test="version != null">
-        #{version,jdbcType=INTEGER},
-      </if>
     </trim>
   </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="com.iidooo.gauge.model.po.GaugeProduct">
+  
+  <!-- 更新一个设备信息通过其ID -->
+  <update id="updateByPrimaryKey" parameterType="com.iidooo.gauge.model.po.GaugeProduct">
     update gauge_product
     <set>
       <if test="vehicleID != null">
@@ -246,40 +222,11 @@
       <if test="remarks != null">
         Remarks = #{remarks,jdbcType=VARCHAR},
       </if>
-      <if test="updateTime != null">
-        UpdateTime = #{updateTime,jdbcType=TIMESTAMP},
-      </if>
       <if test="updateUserID != null">
         UpdateUserID = #{updateUserID,jdbcType=INTEGER},
       </if>
-      <if test="createTime != null">
-        CreateTime = #{createTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="createUserID != null">
-        CreateUserID = #{createUserID,jdbcType=INTEGER},
-      </if>
-      <if test="isDelete != null">
-        IsDelete = #{isDelete,jdbcType=INTEGER},
-      </if>
-      <if test="version != null">
-        Version = #{version,jdbcType=INTEGER},
-      </if>
+        Version = Version + 1
     </set>
-    where ProductID = #{productID,jdbcType=INTEGER}
-  </update>
-  <update id="updateByPrimaryKey" parameterType="com.iidooo.gauge.model.po.GaugeProduct">
-    update gauge_product
-    set VehicleID = #{vehicleID,jdbcType=INTEGER},
-      DriverID = #{driverID,jdbcType=INTEGER},
-      ProductCode = #{productCode,jdbcType=VARCHAR},
-      City = #{city,jdbcType=VARCHAR},
-      Remarks = #{remarks,jdbcType=VARCHAR},
-      UpdateTime = #{updateTime,jdbcType=TIMESTAMP},
-      UpdateUserID = #{updateUserID,jdbcType=INTEGER},
-      CreateTime = #{createTime,jdbcType=TIMESTAMP},
-      CreateUserID = #{createUserID,jdbcType=INTEGER},
-      IsDelete = #{isDelete,jdbcType=INTEGER},
-      Version = #{version,jdbcType=INTEGER}
     where ProductID = #{productID,jdbcType=INTEGER}
   </update>
 </mapper>

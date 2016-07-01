@@ -5,13 +5,19 @@ import com.iidooo.gauge.model.po.GaugeDriver;
 public interface GaugeDriverMapper {
     int deleteByPrimaryKey(Integer driverID);
 
-    int insert(GaugeDriver record);
-
-    int insertSelective(GaugeDriver record);
+    /**
+     * 插入一个新的驾驶员对象
+     * @param driver 驾驶员信息
+     * @return 插入成功与否
+     */
+    int insert(GaugeDriver driver);
 
     GaugeDriver selectByPrimaryKey(Integer driverID);
 
-    int updateByPrimaryKeySelective(GaugeDriver record);
-
-    int updateByPrimaryKey(GaugeDriver record);
+    /**
+     * 更新一个驾驶员信息通过其ID
+     * @param driver 驾驶员信息
+     * @return 更新成功与否
+     */
+    int updateByPrimaryKey(GaugeDriver driver);
 }

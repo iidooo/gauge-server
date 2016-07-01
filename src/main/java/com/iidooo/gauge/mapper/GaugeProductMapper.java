@@ -10,9 +10,19 @@ import com.iidooo.gauge.model.po.GaugeProduct;
 public interface GaugeProductMapper {
     int deleteByPrimaryKey(Integer productID);
 
-    int insert(GaugeProduct record);
-
-    int insertSelective(GaugeProduct record);
+    /**
+     * 插入一个新的设备对象
+     * @param product 车辆对象
+     * @return 插入成功与否
+     */
+    int insert(GaugeProduct product);
+    
+    /**
+     * 根据主键查找设备
+     * @param productID 设备ID
+     * @return 设备对象
+     */
+    GaugeProduct selectByPrimaryKey(int productID);
     
     /**
      * 查询设备一览的数量
@@ -29,7 +39,10 @@ public interface GaugeProductMapper {
      */
     List<GaugeProduct> selectForSearch(@Param("product")GaugeProduct product, @Param("page")Page page);
 
-    int updateByPrimaryKeySelective(GaugeProduct record);
-
-    int updateByPrimaryKey(GaugeProduct record);
+    /**
+     * 更新一个设备信息通过其ID
+     * @param product 设备信息
+     * @return 更新成功与否
+     */
+    int updateByPrimaryKey(GaugeProduct product);
 }

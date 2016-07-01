@@ -31,24 +31,11 @@
     delete from gauge_vehicle
     where VehicleID = #{vehicleID,jdbcType=INTEGER}
   </delete>
-  <insert id="insert" parameterType="com.iidooo.gauge.model.po.GaugeVehicle" >
-    insert into gauge_vehicle (VehicleID, VehicleNo, License, 
-      Volume, Maker, Type, Model, 
-      Remarks, UpdateTime, UpdateUserID, 
-      CreateTime, CreateUserID, IsDelete, 
-      Version)
-    values (#{vehicleID,jdbcType=INTEGER}, #{vehicleNo,jdbcType=VARCHAR}, #{license,jdbcType=VARCHAR}, 
-      #{volume,jdbcType=REAL}, #{maker,jdbcType=VARCHAR}, #{type,jdbcType=VARCHAR}, #{model,jdbcType=VARCHAR}, 
-      #{remarks,jdbcType=VARCHAR}, #{updateTime,jdbcType=TIMESTAMP}, #{updateUserID,jdbcType=INTEGER}, 
-      #{createTime,jdbcType=TIMESTAMP}, #{createUserID,jdbcType=INTEGER}, #{isDelete,jdbcType=INTEGER}, 
-      #{version,jdbcType=INTEGER})
-  </insert>
-  <insert id="insertSelective" parameterType="com.iidooo.gauge.model.po.GaugeVehicle" >
+
+  <!-- 插入一个新的车辆对象 -->
+  <insert id="insert" useGeneratedKeys="true" keyProperty="vehicleID" parameterType="com.iidooo.gauge.model.po.GaugeVehicle" >
     insert into gauge_vehicle
     <trim prefix="(" suffix=")" suffixOverrides="," >
-      <if test="vehicleID != null" >
-        VehicleID,
-      </if>
       <if test="vehicleNo != null" >
         VehicleNo,
       </if>
@@ -70,9 +57,6 @@
       <if test="remarks != null" >
         Remarks,
       </if>
-      <if test="updateTime != null" >
-        UpdateTime,
-      </if>
       <if test="updateUserID != null" >
         UpdateUserID,
       </if>
@@ -82,17 +66,8 @@
       <if test="createUserID != null" >
         CreateUserID,
       </if>
-      <if test="isDelete != null" >
-        IsDelete,
-      </if>
-      <if test="version != null" >
-        Version,
-      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
-      <if test="vehicleID != null" >
-        #{vehicleID,jdbcType=INTEGER},
-      </if>
       <if test="vehicleNo != null" >
         #{vehicleNo,jdbcType=VARCHAR},
       </if>
@@ -114,9 +89,6 @@
       <if test="remarks != null" >
         #{remarks,jdbcType=VARCHAR},
       </if>
-      <if test="updateTime != null" >
-        #{updateTime,jdbcType=TIMESTAMP},
-      </if>
       <if test="updateUserID != null" >
         #{updateUserID,jdbcType=INTEGER},
       </if>
@@ -126,15 +98,11 @@
       <if test="createUserID != null" >
         #{createUserID,jdbcType=INTEGER},
       </if>
-      <if test="isDelete != null" >
-        #{isDelete,jdbcType=INTEGER},
-      </if>
-      <if test="version != null" >
-        #{version,jdbcType=INTEGER},
-      </if>
     </trim>
   </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="com.iidooo.gauge.model.po.GaugeVehicle" >
+  
+  <!-- 更新一个车辆信息通过其ID -->
+  <update id="updateByPrimaryKey" parameterType="com.iidooo.gauge.model.po.GaugeVehicle" >
     update gauge_vehicle
     <set >
       <if test="vehicleNo != null" >
@@ -158,42 +126,11 @@
       <if test="remarks != null" >
         Remarks = #{remarks,jdbcType=VARCHAR},
       </if>
-      <if test="updateTime != null" >
-        UpdateTime = #{updateTime,jdbcType=TIMESTAMP},
-      </if>
       <if test="updateUserID != null" >
         UpdateUserID = #{updateUserID,jdbcType=INTEGER},
       </if>
-      <if test="createTime != null" >
-        CreateTime = #{createTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="createUserID != null" >
-        CreateUserID = #{createUserID,jdbcType=INTEGER},
-      </if>
-      <if test="isDelete != null" >
-        IsDelete = #{isDelete,jdbcType=INTEGER},
-      </if>
-      <if test="version != null" >
-        Version = #{version,jdbcType=INTEGER},
-      </if>
+        Version = Version + 1
     </set>
-    where VehicleID = #{vehicleID,jdbcType=INTEGER}
-  </update>
-  <update id="updateByPrimaryKey" parameterType="com.iidooo.gauge.model.po.GaugeVehicle" >
-    update gauge_vehicle
-    set VehicleNo = #{vehicleNo,jdbcType=VARCHAR},
-      License = #{license,jdbcType=VARCHAR},
-      Volume = #{volume,jdbcType=REAL},
-      Maker = #{maker,jdbcType=VARCHAR},
-      Type = #{type,jdbcType=VARCHAR},
-      Model = #{model,jdbcType=VARCHAR},
-      Remarks = #{remarks,jdbcType=VARCHAR},
-      UpdateTime = #{updateTime,jdbcType=TIMESTAMP},
-      UpdateUserID = #{updateUserID,jdbcType=INTEGER},
-      CreateTime = #{createTime,jdbcType=TIMESTAMP},
-      CreateUserID = #{createUserID,jdbcType=INTEGER},
-      IsDelete = #{isDelete,jdbcType=INTEGER},
-      Version = #{version,jdbcType=INTEGER}
     where VehicleID = #{vehicleID,jdbcType=INTEGER}
   </update>
 </mapper>

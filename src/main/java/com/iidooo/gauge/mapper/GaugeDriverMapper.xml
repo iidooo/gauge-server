@@ -33,26 +33,11 @@
     delete from gauge_driver
     where DriverID = #{driverID,jdbcType=INTEGER}
   </delete>
-  <insert id="insert" parameterType="com.iidooo.gauge.model.po.GaugeDriver" >
-    insert into gauge_driver (DriverID, FirstName, LastName, 
-      Birthday, License, LicenseType, 
-      ValidStart, ValidEnd, Phone, 
-      Remarks, UpdateTime, UpdateUserID, 
-      CreateTime, CreateUserID, IsDelete, 
-      Version)
-    values (#{driverID,jdbcType=INTEGER}, #{firstName,jdbcType=VARCHAR}, #{lastName,jdbcType=VARCHAR}, 
-      #{birthday,jdbcType=DATE}, #{license,jdbcType=VARCHAR}, #{licenseType,jdbcType=VARCHAR}, 
-      #{validStart,jdbcType=DATE}, #{validEnd,jdbcType=DATE}, #{phone,jdbcType=VARCHAR}, 
-      #{remarks,jdbcType=VARCHAR}, #{updateTime,jdbcType=TIMESTAMP}, #{updateUserID,jdbcType=INTEGER}, 
-      #{createTime,jdbcType=TIMESTAMP}, #{createUserID,jdbcType=INTEGER}, #{isDelete,jdbcType=INTEGER}, 
-      #{version,jdbcType=INTEGER})
-  </insert>
-  <insert id="insertSelective" parameterType="com.iidooo.gauge.model.po.GaugeDriver" >
+  
+	<!-- 插入一个新的驾驶员对象 -->
+  <insert id="insert" useGeneratedKeys="true" keyProperty="driverID" parameterType="com.iidooo.gauge.model.po.GaugeDriver" >
     insert into gauge_driver
     <trim prefix="(" suffix=")" suffixOverrides="," >
-      <if test="driverID != null" >
-        DriverID,
-      </if>
       <if test="firstName != null" >
         FirstName,
       </if>
@@ -80,9 +65,6 @@
       <if test="remarks != null" >
         Remarks,
       </if>
-      <if test="updateTime != null" >
-        UpdateTime,
-      </if>
       <if test="updateUserID != null" >
         UpdateUserID,
       </if>
@@ -92,17 +74,8 @@
       <if test="createUserID != null" >
         CreateUserID,
       </if>
-      <if test="isDelete != null" >
-        IsDelete,
-      </if>
-      <if test="version != null" >
-        Version,
-      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
-      <if test="driverID != null" >
-        #{driverID,jdbcType=INTEGER},
-      </if>
       <if test="firstName != null" >
         #{firstName,jdbcType=VARCHAR},
       </if>
@@ -130,9 +103,6 @@
       <if test="remarks != null" >
         #{remarks,jdbcType=VARCHAR},
       </if>
-      <if test="updateTime != null" >
-        #{updateTime,jdbcType=TIMESTAMP},
-      </if>
       <if test="updateUserID != null" >
         #{updateUserID,jdbcType=INTEGER},
       </if>
@@ -142,15 +112,11 @@
       <if test="createUserID != null" >
         #{createUserID,jdbcType=INTEGER},
       </if>
-      <if test="isDelete != null" >
-        #{isDelete,jdbcType=INTEGER},
-      </if>
-      <if test="version != null" >
-        #{version,jdbcType=INTEGER},
-      </if>
     </trim>
   </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="com.iidooo.gauge.model.po.GaugeDriver" >
+  
+  <!-- 更新一个驾驶员信息通过其ID -->
+  <update id="updateByPrimaryKey" parameterType="com.iidooo.gauge.model.po.GaugeDriver" >
     update gauge_driver
     <set >
       <if test="firstName != null" >
@@ -180,44 +146,11 @@
       <if test="remarks != null" >
         Remarks = #{remarks,jdbcType=VARCHAR},
       </if>
-      <if test="updateTime != null" >
-        UpdateTime = #{updateTime,jdbcType=TIMESTAMP},
-      </if>
       <if test="updateUserID != null" >
         UpdateUserID = #{updateUserID,jdbcType=INTEGER},
       </if>
-      <if test="createTime != null" >
-        CreateTime = #{createTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="createUserID != null" >
-        CreateUserID = #{createUserID,jdbcType=INTEGER},
-      </if>
-      <if test="isDelete != null" >
-        IsDelete = #{isDelete,jdbcType=INTEGER},
-      </if>
-      <if test="version != null" >
-        Version = #{version,jdbcType=INTEGER},
-      </if>
+        Version = Version + 1
     </set>
-    where DriverID = #{driverID,jdbcType=INTEGER}
-  </update>
-  <update id="updateByPrimaryKey" parameterType="com.iidooo.gauge.model.po.GaugeDriver" >
-    update gauge_driver
-    set FirstName = #{firstName,jdbcType=VARCHAR},
-      LastName = #{lastName,jdbcType=VARCHAR},
-      Birthday = #{birthday,jdbcType=DATE},
-      License = #{license,jdbcType=VARCHAR},
-      LicenseType = #{licenseType,jdbcType=VARCHAR},
-      ValidStart = #{validStart,jdbcType=DATE},
-      ValidEnd = #{validEnd,jdbcType=DATE},
-      Phone = #{phone,jdbcType=VARCHAR},
-      Remarks = #{remarks,jdbcType=VARCHAR},
-      UpdateTime = #{updateTime,jdbcType=TIMESTAMP},
-      UpdateUserID = #{updateUserID,jdbcType=INTEGER},
-      CreateTime = #{createTime,jdbcType=TIMESTAMP},
-      CreateUserID = #{createUserID,jdbcType=INTEGER},
-      IsDelete = #{isDelete,jdbcType=INTEGER},
-      Version = #{version,jdbcType=INTEGER}
     where DriverID = #{driverID,jdbcType=INTEGER}
   </update>
 </mapper>

@@ -14,36 +14,67 @@
 		<result column="CreateUserID" property="createUserID" jdbcType="INTEGER" />
 		<result column="IsDelete" property="isDelete" jdbcType="INTEGER" />
 		<result column="Version" property="version" jdbcType="INTEGER" />
-
 		<association select="selectProduct" column="productID" property="product" javaType="com.iidooo.gauge.model.po.GaugeProduct"></association>
 	</resultMap>
 	<sql id="Base_Column_List">
 		I.ItemID, I.ProductID, I.Temperature, I.Pressure, I.Particulate, I.Remarks, I.UpdateTime, I.UpdateUserID,
-		I.CreateTime, I.CreateUserID, I.IsDelete, I.Version
+		I.CreateTime, I.CreateUserID,
+		I.IsDelete, I.Version
 	</sql>
 
 	<!-- 查询Item所关联的Product对象 -->
 	<resultMap id="ProductResultMap" type="com.iidooo.gauge.model.po.GaugeProduct">
-		<id column="ProductID" property="productID" jdbcType="INTEGER" />
-		<result column="ProductCode" property="productCode" jdbcType="VARCHAR" />
-		<result column="VehicleLicense" property="vehicleLicense" jdbcType="VARCHAR" />
-		<result column="Remarks" property="remarks" jdbcType="VARCHAR" />
-		<result column="UpdateTime" property="updateTime" jdbcType="TIMESTAMP" />
-		<result column="UpdateUserID" property="updateUserID" jdbcType="INTEGER" />
-		<result column="CreateTime" property="createTime" jdbcType="TIMESTAMP" />
-		<result column="CreateUserID" property="createUserID" jdbcType="INTEGER" />
-		<result column="IsDelete" property="isDelete" jdbcType="INTEGER" />
-		<result column="Version" property="version" jdbcType="INTEGER" />
+		<id column="ProductID" jdbcType="INTEGER" property="productID" />
+		<result column="VehicleID" jdbcType="INTEGER" property="vehicleID" />
+		<result column="DriverID" jdbcType="INTEGER" property="driverID" />
+		<result column="ProductCode" jdbcType="VARCHAR" property="productCode" />
+		<result column="City" jdbcType="VARCHAR" property="city" />
+		<result column="Remarks" jdbcType="VARCHAR" property="remarks" />
+		<result column="UpdateTime" jdbcType="TIMESTAMP" property="updateTime" />
+		<result column="UpdateUserID" jdbcType="INTEGER" property="updateUserID" />
+		<result column="CreateTime" jdbcType="TIMESTAMP" property="createTime" />
+		<result column="CreateUserID" jdbcType="INTEGER" property="createUserID" />
+		<result column="IsDelete" jdbcType="INTEGER" property="isDelete" />
+		<result column="Version" jdbcType="INTEGER" property="version" />
+		<association select="selectVehicle" column="vehicleID" property="vehicle" javaType="com.iidooo.gauge.model.po.GaugeVehicle"></association>
 	</resultMap>
 	<sql id="Product_Column_List">
-		P.ProductID, P.ProductCode, P.VehicleLicense, P.Remarks, P.UpdateTime, P.UpdateUserID, P.CreateTime,
-		P.CreateUserID, P.IsDelete, P.Version
+		P.ProductID, P.VehicleID, P.DriverID, P.ProductCode, P.City, P.Remarks, P.UpdateTime, P.UpdateUserID,
+		P.CreateTime, P.CreateUserID, P.IsDelete, P.Version
 	</sql>
 	<select id="selectProduct" resultMap="ProductResultMap" parameterType="java.lang.Integer">
 		select
 		<include refid="Product_Column_List" />
 		from gauge_product P
 		where P.IsDelete = 0 and P.ProductID = #{productID,jdbcType=INTEGER}
+	</select>
+
+	<!-- 车辆关联查询 -->
+	<resultMap id="VehicleResultMap" type="com.iidooo.gauge.model.po.GaugeVehicle">
+		<id column="VehicleID" jdbcType="INTEGER" property="vehicleID" />
+		<result column="VehicleNo" jdbcType="VARCHAR" property="vehicleNo" />
+		<result column="License" jdbcType="VARCHAR" property="license" />
+		<result column="Volume" jdbcType="REAL" property="volume" />
+		<result column="Maker" jdbcType="VARCHAR" property="maker" />
+		<result column="Type" jdbcType="VARCHAR" property="type" />
+		<result column="Model" jdbcType="VARCHAR" property="model" />
+		<result column="Remarks" jdbcType="VARCHAR" property="remarks" />
+		<result column="UpdateTime" jdbcType="TIMESTAMP" property="updateTime" />
+		<result column="UpdateUserID" jdbcType="INTEGER" property="updateUserID" />
+		<result column="CreateTime" jdbcType="TIMESTAMP" property="createTime" />
+		<result column="CreateUserID" jdbcType="INTEGER" property="createUserID" />
+		<result column="IsDelete" jdbcType="INTEGER" property="isDelete" />
+		<result column="Version" jdbcType="INTEGER" property="version" />
+	</resultMap>
+	<sql id="Vehicle_Column_List">
+		V.VehicleID, V.VehicleNo, V.License, V.Volume, V.Maker, V.Type, V.Model, V.Remarks, V.UpdateTime, V.UpdateUserID,
+		V.CreateTime, V.CreateUserID, V.IsDelete, V.Version
+	</sql>
+	<select id="selectVehicle" parameterType="java.lang.Integer" resultMap="VehicleResultMap">
+		select
+		<include refid="Vehicle_Column_List" />
+		from gauge_vehicle V
+		where V.IsDelete = 0 and V.VehicleID = #{vehicleID,jdbcType=INTEGER}
 	</select>
 
 	<select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
@@ -62,6 +93,66 @@
 		order by ${sortField} ${sortType}
 		limit ${start}, ${pageSize}
 	</select>
+	
+	<!-- 查询监控项目一览数目 -->
+	<select id="selectCountForSearch" parameterType="com.iidooo.gauge.model.vo.SearchCondition" resultType="java.lang.Integer">
+		select
+		count(I.ItemID)
+		from gauge_item I
+		join gauge_product P
+		join gauge_vehicle V
+		on I.IsDelete = 0 and P.IsDelete = 0 and V.IsDelete = 0 
+		and I.ProductID = P.ProductID and P.VehicleID = V.VehicleID
+		<if test="productCode != null and productCode != ''">
+		and P.ProductCode like '%${productCode}%'
+		</if>
+		<if test="vehicleLicense != null and vehicleLicense != ''">
+		and V.License like '%${vehicleLicense}%'
+		</if>
+		<if test="temperature != null">
+		and I.Temperature ${tempCompareLabel} #{temperature}
+		</if>
+		<if test="pressure != null">
+		and I.Pressure ${pressureCompareLabel} #{pressure}
+		</if>
+		<if test="startDateTime != null">
+		and I.CreateTime &gt;= #{startDateTime}
+		</if>
+		<if test="endDateTime != null">
+		and I.CreateTime &lt;= #{endDateTime}
+		</if>
+	</select>
+	
+	<!-- 查询监控项目一览 -->
+	<select id="selectForSearch" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from gauge_item I
+		join gauge_product P
+		join gauge_vehicle V
+		on I.IsDelete = 0 and P.IsDelete = 0 and V.IsDelete = 0 
+		and I.ProductID = P.ProductID and P.VehicleID = V.VehicleID
+		<if test="condition.productCode != null and condition.productCode != ''">
+		and P.ProductCode like '%${condition.productCode}%'
+		</if>
+		<if test="condition.vehicleLicense != null and condition.vehicleLicense != ''">
+		and V.License like '%${condition.vehicleLicense}%'
+		</if>
+		<if test="condition.temperature != null">
+		and I.Temperature ${condition.tempCompareLabel} #{condition.temperature}
+		</if>
+		<if test="condition.pressure != null">
+		and I.Pressure ${condition.pressureCompareLabel} #{condition.pressure}
+		</if>
+		<if test="condition.startDateTime != null">
+		and I.CreateTime &gt;= #{condition.startDateTime}
+		</if>
+		<if test="condition.endDateTime != null">
+		and I.CreateTime &lt;= #{condition.endDateTime}
+		</if>
+		order by ${page.sortField} ${page.sortType}
+		limit ${page.start}, ${page.pageSize}
+	</select>
 
 	<delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
 		delete from gauge_item
@@ -70,13 +161,17 @@
 	<insert id="insert" parameterType="com.iidooo.gauge.model.po.GaugeItem">
 		insert into gauge_item (ItemID, ProductID, Temperature,
 		Pressure, Particulate, Remarks,
-		UpdateTime, UpdateUserID, CreateTime,
+		UpdateTime,
+		UpdateUserID, CreateTime,
 		CreateUserID, IsDelete, Version
 		)
-		values (#{itemID,jdbcType=INTEGER}, #{productID,jdbcType=INTEGER}, #{temperature,jdbcType=REAL},
+		values (#{itemID,jdbcType=INTEGER}, #{productID,jdbcType=INTEGER},
+		#{temperature,jdbcType=REAL},
 		#{pressure,jdbcType=REAL}, #{particulate,jdbcType=REAL}, #{remarks,jdbcType=VARCHAR},
-		#{updateTime,jdbcType=TIMESTAMP}, #{updateUserID,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP},
-		#{createUserID,jdbcType=INTEGER}, #{isDelete,jdbcType=INTEGER}, #{version,jdbcType=INTEGER}
+		#{updateTime,jdbcType=TIMESTAMP},
+		#{updateUserID,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP},
+		#{createUserID,jdbcType=INTEGER}, #{isDelete,jdbcType=INTEGER},
+		#{version,jdbcType=INTEGER}
 		)
 	</insert>
 	<insert id="insertSelective" parameterType="com.iidooo.gauge.model.po.GaugeItem">
@@ -200,7 +295,8 @@
 	<update id="updateByPrimaryKey" parameterType="com.iidooo.gauge.model.po.GaugeItem">
 		update gauge_item
 		set ProductID = #{productID,jdbcType=INTEGER},
-		Temperature = #{temperature,jdbcType=REAL},
+		Temperature =
+		#{temperature,jdbcType=REAL},
 		Pressure = #{pressure,jdbcType=REAL},
 		Particulate = #{particulate,jdbcType=REAL},
 		Remarks = #{remarks,jdbcType=VARCHAR},
@@ -210,6 +306,7 @@
 		CreateUserID = #{createUserID,jdbcType=INTEGER},
 		IsDelete = #{isDelete,jdbcType=INTEGER},
 		Version = #{version,jdbcType=INTEGER}
-		where ItemID = #{itemID,jdbcType=INTEGER}
+		where ItemID =
+		#{itemID,jdbcType=INTEGER}
 	</update>
 </mapper>

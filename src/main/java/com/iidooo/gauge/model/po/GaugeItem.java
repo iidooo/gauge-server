@@ -6,6 +6,8 @@ public class GaugeItem {
     private Integer itemID;
 
     private Integer productID;
+    
+    private GaugeProduct product;
 
     private Float temperature;
 
@@ -27,7 +29,9 @@ public class GaugeItem {
 
     private Integer version;
     
-    private GaugeProduct product;
+    public GaugeItem(){
+        this.product = new GaugeProduct();
+    }
 
     public Integer getItemID() {
         return itemID;
@@ -43,6 +47,14 @@ public class GaugeItem {
 
     public void setProductID(Integer productID) {
         this.productID = productID;
+    }
+    
+    public GaugeProduct getProduct() {
+        return product;
+    }
+
+    public void setProduct(GaugeProduct product) {
+        this.product = product;
     }
 
     public Float getTemperature() {
@@ -123,13 +135,5 @@ public class GaugeItem {
 
     public void setVersion(Integer version) {
         this.version = version;
-    }
-
-    public GaugeProduct getProduct() {
-        return product;
-    }
-
-    public void setProduct(GaugeProduct product) {
-        this.product = product;
     }
 }
