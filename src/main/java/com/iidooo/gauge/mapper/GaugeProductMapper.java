@@ -25,6 +25,13 @@ public interface GaugeProductMapper {
     GaugeProduct selectByPrimaryKey(int productID);
     
     /**
+     * 根据设备编号获取设备
+     * @param productCode 设备编号
+     * @return 设备对象 
+     */
+    GaugeProduct selectByProductCode(String productCode);
+    
+    /**
      * 查询设备一览的数量
      * @param product 查询条件封装
      * @return 条目数

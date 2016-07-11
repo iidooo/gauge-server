@@ -36,18 +36,18 @@ public class GaugeProductServiceImpl implements GaugeProductService {
         try {
             product.getDriver().setCreateTime(new Date());
             product.getDriver().setUpdateUserID(product.getCreateUserID());            
-            int driverID = driverMapper.insert(product.getDriver());
+            driverMapper.insert(product.getDriver());
             
             product.getVehicle().setCreateTime(new Date());
             product.getVehicle().setUpdateUserID(product.getCreateUserID());
-            int vehicleID = vehicleMapper.insert(product.getVehicle());
+            vehicleMapper.insert(product.getVehicle());
 
-            product.setDriverID(driverID);
-            product.setVehicleID(vehicleID);
+            product.setDriverID(product.getDriver().getDriverID());
+            product.setVehicleID(product.getVehicle().getVehicleID());
             product.setCreateTime(new Date());
             product.setUpdateUserID(product.getCreateUserID());
-            int productID = productMapper.insert(product);
-            product = productMapper.selectByPrimaryKey(productID);
+            productMapper.insert(product);
+            product = productMapper.selectByPrimaryKey(product.getProductID());
             return product;
         } catch (Exception e) {
             logger.fatal(e);
@@ -73,6 +73,17 @@ public class GaugeProductServiceImpl implements GaugeProductService {
     public GaugeProduct getProduct(Integer productID) {
         try {
             GaugeProduct product = productMapper.selectByPrimaryKey(productID);
+            return product;
+        } catch (Exception e) {
+            logger.fatal(e);
+            throw e;
+        }
+    }
+
+    @Override
+    public GaugeProduct getProductByCode(String productCode) {
+        try {
+            GaugeProduct product = productMapper.selectByProductCode(productCode);
             return product;
         } catch (Exception e) {
             logger.fatal(e);

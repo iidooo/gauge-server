@@ -13,6 +13,8 @@ public interface GaugeProductService {
     
     GaugeProduct getProduct(Integer productID);
     
+    GaugeProduct getProductByCode(String productCode);
+    
     int getProductListCount(GaugeProduct product);
     
     List<GaugeProduct> getProductList(GaugeProduct product, Page page);

@@ -39,16 +39,16 @@ public class GaugeProductController {
         ResponseResult result = new ResponseResult();
         try {
             String productID = request.getParameter("productID");
-            
+
             result.checkFieldRequired("productID", productID);
             result.checkFieldInteger("productID", productID);
-            
+
             if (result.getMessages().size() > 0) {
                 // 验证失败，返回message
                 result.setStatus(ResponseStatus.Failed.getCode());
                 return result;
             }
-            
+
             GaugeProduct product = productService.getProduct(Integer.parseInt(productID));
             if (product == null) {
                 result.setStatus(ResponseStatus.Failed.getCode());
@@ -64,7 +64,7 @@ public class GaugeProductController {
         }
         return result;
     }
-    
+
     @ResponseBody
     @RequestMapping(value = "/searchProductList", method = RequestMethod.POST)
     public ResponseResult searchProductList(HttpServletRequest request, HttpServletResponse response) {
@@ -92,11 +92,12 @@ public class GaugeProductController {
                 page.setSortType(sortType);
             }
             String pageSize = request.getParameter("pageSize");
-            if (StringUtil.isNotBlank(pageSize) && ValidateUtil.isNumber(pageSize)) {
+            if (StringUtil.isNotBlank(pageSize) && ValidateUtil.isMatch(pageSize, RegularConstant.REGEX_NUMBER)) {
                 page.setPageSize(Integer.parseInt(pageSize));
             }
             String currentPage = request.getParameter("currentPage");
-            if (StringUtil.isNotBlank(currentPage) && ValidateUtil.isNumber(currentPage) && Integer.parseInt(currentPage) > 0) {
+            if (StringUtil.isNotBlank(currentPage) && ValidateUtil.isMatch(currentPage, RegularConstant.REGEX_NUMBER)
+                    && Integer.parseInt(currentPage) > 0) {
                 page.setCurrentPage(Integer.parseInt(currentPage));
             }
             page = PageUtil.executePage(recordSum, page);
@@ -148,9 +149,12 @@ public class GaugeProductController {
             result.checkFieldRequired("driverPhone", driverPhone);
             result.checkFieldRequired("driverLicense", driverLicense);
 
+            // 产品编号不能重复
+            result.checkFieldUnique("productCode", productService.getProductByCode(productCode));
+
             if (result.getMessages().size() > 0) {
                 // 验证失败，返回message
-                result.setStatus(ResponseStatus.Failed.getCode());
+                result.setStatus(ResponseStatus.ValidateFailed.getCode());
                 return result;
             }
 
@@ -168,12 +172,18 @@ public class GaugeProductController {
             product.getVehicle().setModel(vehicleModel);
             product.getDriver().setFirstName(driverFirstName);
             product.getDriver().setLastName(driverLastName);
-            product.getDriver().setBirthday(DateUtil.getDate(driverBirthday, DateUtil.DATE_HYPHEN));
+            if (StringUtil.isNotBlank(driverBirthday)) {
+                product.getDriver().setBirthday(DateUtil.getDate(driverBirthday, DateUtil.DATE_HYPHEN));
+            }
             product.getDriver().setPhone(driverPhone);
             product.getDriver().setLicense(driverLicense);
             product.getDriver().setLicenseType(driverLicenseType);
-            product.getDriver().setValidStart(DateUtil.getDate(driverLicenseStart, DateUtil.DATE_HYPHEN));
-            product.getDriver().setValidEnd(DateUtil.getDate(driverLicenseEnd, DateUtil.DATE_HYPHEN));
+            if (StringUtil.isNotBlank(driverLicenseStart)) {
+                product.getDriver().setValidStart(DateUtil.getDate(driverLicenseStart, DateUtil.DATE_HYPHEN));
+            }
+            if (StringUtil.isNotBlank(driverLicenseEnd)) {
+                product.getDriver().setValidEnd(DateUtil.getDate(driverLicenseEnd, DateUtil.DATE_HYPHEN));
+            }
 
             product = productService.createProductInfo(product);
             if (product == null || product.getProductID() == null || product.getProductID() <= 0) {
@@ -190,7 +200,7 @@ public class GaugeProductController {
         }
         return result;
     }
-    
+
     @ResponseBody
     @RequestMapping(value = "/updateProduct", method = RequestMethod.POST)
     public ResponseResult updateProduct(HttpServletRequest request, HttpServletResponse response) {
@@ -200,7 +210,7 @@ public class GaugeProductController {
             String productID = request.getParameter("productID");
             String productCode = request.getParameter("productCode");
             String productCity = request.getParameter("productCity");
-            
+
             String vehicleID = request.getParameter("vehicleID");
             String vehicleLicense = request.getParameter("vehicleLicense");
             String vehicleNo = request.getParameter("vehicleNo");
@@ -208,7 +218,7 @@ public class GaugeProductController {
             String vehicleVolumn = request.getParameter("vehicleVolumn");
             String vehicleMaker = request.getParameter("vehicleMaker");
             String vehicleModel = request.getParameter("vehicleModel");
-            
+
             String driverID = request.getParameter("driverID");
             String driverFirstName = request.getParameter("driverFirstName");
             String driverLastName = request.getParameter("driverLastName");
@@ -224,11 +234,11 @@ public class GaugeProductController {
             result.checkFieldRequired("productID", productID);
             result.checkFieldInteger("productID", productID);
             result.checkFieldRequired("productCode", productCode);
-            
+
             result.checkFieldRequired("vehicleID", vehicleID);
             result.checkFieldInteger("vehicleID", vehicleID);
             result.checkFieldRequired("vehicleLicense", vehicleLicense);
-            
+
             result.checkFieldRequired("driverID", driverID);
             result.checkFieldInteger("driverID", driverID);
             result.checkFieldRequired("driverFirstName", driverFirstName);
@@ -247,7 +257,7 @@ public class GaugeProductController {
             product.setProductCode(productCode);
             product.setCity(productCity);
             product.setUpdateUserID(Integer.parseInt(userID));
-            
+
             product.getVehicle().setVehicleID(Integer.parseInt(vehicleID));
             product.getVehicle().setLicense(vehicleLicense);
             product.getVehicle().setVehicleNo(vehicleNo);
@@ -257,7 +267,7 @@ public class GaugeProductController {
             }
             product.getVehicle().setMaker(vehicleMaker);
             product.getVehicle().setModel(vehicleModel);
-            
+
             product.getDriver().setDriverID(Integer.parseInt(driverID));
             product.getDriver().setFirstName(driverFirstName);
             product.getDriver().setLastName(driverLastName);
@@ -268,7 +278,7 @@ public class GaugeProductController {
             product.getDriver().setValidStart(DateUtil.getDate(driverLicenseStart, DateUtil.DATE_HYPHEN));
             product.getDriver().setValidEnd(DateUtil.getDate(driverLicenseEnd, DateUtil.DATE_HYPHEN));
 
-            product = productService.createProductInfo(product);
+            product = productService.updateProductInfo(product);
             if (product == null || product.getProductID() == null || product.getProductID() <= 0) {
                 result.setStatus(ResponseStatus.InsertFailed.getCode());
             } else {

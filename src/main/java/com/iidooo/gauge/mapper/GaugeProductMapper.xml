@@ -89,6 +89,15 @@
     where P.IsDelete = 0 and P.ProductID = #{productID,jdbcType=INTEGER}
   </select>
   
+  <!-- 根据设备编号获取设备 -->
+  <select id="selectByProductCode" parameterType="java.lang.String" resultMap="BaseResultMap">
+  	select 
+    <include refid="Base_Column_List" />
+    from gauge_product P 
+    where P.IsDelete = 0 and P.ProductCode = #{productCode,jdbcType=VARCHAR}
+    limit 0,1
+  </select>
+  
   <!-- 查询设备一览的数量 -->
   <select id="selectCountForSearch" parameterType="com.iidooo.gauge.model.po.GaugeProduct" resultType="java.lang.Integer">
     select count(P.ProductID)

@@ -105,11 +105,13 @@ public class GaugeItemController {
                 page.setSortType(sortType);
             }
             String pageSize = request.getParameter("pageSize");
-            if (StringUtil.isNotBlank(pageSize) && ValidateUtil.isNumber(pageSize)) {
+            if (StringUtil.isNotBlank(pageSize) && ValidateUtil.isMatch(pageSize, RegularConstant.REGEX_NUMBER)) {
                 page.setPageSize(Integer.parseInt(pageSize));
             }
             String currentPage = request.getParameter("currentPage");
-            if (StringUtil.isNotBlank(currentPage) && ValidateUtil.isNumber(currentPage) && Integer.parseInt(currentPage) > 0) {
+            if (StringUtil.isNotBlank(currentPage) && 
+                    ValidateUtil.isMatch(currentPage, RegularConstant.REGEX_NUMBER) && 
+                    Integer.parseInt(currentPage) > 0) {
                 page.setCurrentPage(Integer.parseInt(currentPage));
             }
             page = PageUtil.executePage(recordSum, page);
