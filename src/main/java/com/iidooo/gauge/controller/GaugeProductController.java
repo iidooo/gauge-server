@@ -123,6 +123,7 @@ public class GaugeProductController {
         ResponseResult result = new ResponseResult();
         try {
             String userID = request.getParameter("userID");
+            String productModel = request.getParameter("productModel");
             String productCode = request.getParameter("productCode");
             String productCity = request.getParameter("productCity");
             String vehicleLicense = request.getParameter("vehicleLicense");
@@ -159,6 +160,7 @@ public class GaugeProductController {
             }
 
             GaugeProduct product = new GaugeProduct();
+            product.setProductModel(productModel);
             product.setProductCode(productCode);
             product.setCity(productCity);
             product.setCreateUserID(Integer.parseInt(userID));
@@ -208,6 +210,7 @@ public class GaugeProductController {
         try {
             String userID = request.getParameter("userID");
             String productID = request.getParameter("productID");
+            String productModel = request.getParameter("productModel");
             String productCode = request.getParameter("productCode");
             String productCity = request.getParameter("productCity");
 
@@ -233,6 +236,7 @@ public class GaugeProductController {
             result.checkFieldInteger("userID", userID);
             result.checkFieldRequired("productID", productID);
             result.checkFieldInteger("productID", productID);
+            result.checkFieldRequired("productModel", productModel);
             result.checkFieldRequired("productCode", productCode);
 
             result.checkFieldRequired("vehicleID", vehicleID);
@@ -254,6 +258,7 @@ public class GaugeProductController {
 
             GaugeProduct product = new GaugeProduct();
             product.setProductID(Integer.parseInt(productID));
+            product.setProductModel(productModel);
             product.setProductCode(productCode);
             product.setCity(productCity);
             product.setUpdateUserID(Integer.parseInt(userID));

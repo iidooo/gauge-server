@@ -5,6 +5,7 @@
     <id column="ProductID" jdbcType="INTEGER" property="productID" />
     <result column="VehicleID" jdbcType="INTEGER" property="vehicleID" />
     <result column="DriverID" jdbcType="INTEGER" property="driverID" />
+    <result column="ProductModel" jdbcType="VARCHAR" property="productModel" />
     <result column="ProductCode" jdbcType="VARCHAR" property="productCode" />
     <result column="City" jdbcType="VARCHAR" property="city" />
     <result column="Remarks" jdbcType="VARCHAR" property="remarks" />
@@ -19,7 +20,7 @@
     <association select="selectDriver" column="driverID" property="driver" javaType="com.iidooo.gauge.model.po.GaugeDriver"></association>
   </resultMap>
   <sql id="Base_Column_List">
-    P.ProductID, P.VehicleID, P.DriverID, P.ProductCode, P.City, P.Remarks, P.UpdateTime, P.UpdateUserID, 
+    P.ProductID, P.VehicleID, P.DriverID, P.ProductModel, P.ProductCode, P.City, P.Remarks, P.UpdateTime, P.UpdateUserID, 
     P.CreateTime, P.CreateUserID, P.IsDelete, P.Version
   </sql>
   
@@ -165,6 +166,9 @@
       <if test="driverID != null">
         DriverID,
       </if>
+      <if test="productModel != null">
+        ProductModel,
+      </if>
       <if test="productCode != null">
         ProductCode,
       </if>
@@ -190,6 +194,9 @@
       </if>
       <if test="driverID != null">
         #{driverID,jdbcType=INTEGER},
+      </if>
+      <if test="productModel != null">
+        #{productModel,jdbcType=VARCHAR},
       </if>
       <if test="productCode != null">
         #{productCode,jdbcType=VARCHAR},
@@ -221,6 +228,9 @@
       </if>
       <if test="driverID != null">
         DriverID = #{driverID,jdbcType=INTEGER},
+      </if>
+      <if test="productModel != null">
+        ProductModel = #{productModel,jdbcType=VARCHAR},
       </if>
       <if test="productCode != null">
         ProductCode = #{productCode,jdbcType=VARCHAR},

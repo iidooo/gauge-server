@@ -12,6 +12,8 @@ public class GaugeProduct {
     private Integer driverID;
     
     private GaugeDriver driver;
+    
+    private String productModel;
 
     private String productCode;
 
@@ -74,8 +76,16 @@ public class GaugeProduct {
 
     public void setDriver(GaugeDriver driver) {
         this.driver = driver;
-    }
+    }      
     
+    public String getProductModel() {
+        return productModel;
+    }
+
+    public void setProductModel(String productModel) {
+        this.productModel = productModel;
+    }
+
     public String getProductCode() {
         return productCode;
     }

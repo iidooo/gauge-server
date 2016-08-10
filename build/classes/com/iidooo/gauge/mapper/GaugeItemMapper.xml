@@ -7,6 +7,7 @@
 		<result column="Temperature" property="temperature" jdbcType="REAL" />
 		<result column="Pressure" property="pressure" jdbcType="REAL" />
 		<result column="Particulate" property="particulate" jdbcType="REAL" />
+		<result column="ErrorCode" property="errorCode" jdbcType="VARCHAR" />
 		<result column="Remarks" property="remarks" jdbcType="VARCHAR" />
 		<result column="UpdateTime" property="updateTime" jdbcType="TIMESTAMP" />
 		<result column="UpdateUserID" property="updateUserID" jdbcType="INTEGER" />
@@ -17,7 +18,7 @@
 		<association select="selectProduct" column="productID" property="product" javaType="com.iidooo.gauge.model.po.GaugeProduct"></association>
 	</resultMap>
 	<sql id="Base_Column_List">
-		I.ItemID, I.ProductID, I.Temperature, I.Pressure, I.Particulate, I.Remarks, I.UpdateTime, I.UpdateUserID,
+		I.ItemID, I.ProductID, I.Temperature, I.Pressure, I.Particulate, I.ErrorCode, I.Remarks, I.UpdateTime, I.UpdateUserID,
 		I.CreateTime, I.CreateUserID,
 		I.IsDelete, I.Version
 	</sql>
@@ -27,6 +28,7 @@
 		<id column="ProductID" jdbcType="INTEGER" property="productID" />
 		<result column="VehicleID" jdbcType="INTEGER" property="vehicleID" />
 		<result column="DriverID" jdbcType="INTEGER" property="driverID" />
+		<result column="ProductModel" jdbcType="VARCHAR" property="productModel" />
 		<result column="ProductCode" jdbcType="VARCHAR" property="productCode" />
 		<result column="City" jdbcType="VARCHAR" property="city" />
 		<result column="Remarks" jdbcType="VARCHAR" property="remarks" />
@@ -39,7 +41,7 @@
 		<association select="selectVehicle" column="vehicleID" property="vehicle" javaType="com.iidooo.gauge.model.po.GaugeVehicle"></association>
 	</resultMap>
 	<sql id="Product_Column_List">
-		P.ProductID, P.VehicleID, P.DriverID, P.ProductCode, P.City, P.Remarks, P.UpdateTime, P.UpdateUserID,
+		P.ProductID, P.VehicleID, P.DriverID, P.ProductModel, P.ProductCode, P.City, P.Remarks, P.UpdateTime, P.UpdateUserID,
 		P.CreateTime, P.CreateUserID, P.IsDelete, P.Version
 	</sql>
 	<select id="selectProduct" resultMap="ProductResultMap" parameterType="java.lang.Integer">
